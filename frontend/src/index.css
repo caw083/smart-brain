@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Courier New', Courier, monospace;
   background: linear-gradient(89deg, #b6f614 0%, #04C8DE 100%);
 }
 
