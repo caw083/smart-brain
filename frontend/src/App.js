@@ -19,8 +19,6 @@ const returnClarifaiJSONRequest = (imageUrl) => {
   const APP_ID = 'Smart-Brain123';
   // Change these to whatever model and image URL you want to use
   const IMAGE_URL = imageUrl;
-  console.log(imageUrl)
-
 
   const raw = JSON.stringify({
           "user_app_id": {
@@ -56,28 +54,36 @@ class App extends Component {
     this.state = {
       input: "",
       imageUrl: "",
-      box: {}
+      box: []
 
     }
   }
 
   calculateFaceLocation = (data) => {
-    console.log(data.outputs[0].data.regions);
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
-    }
+
+    let peopleFace = [];
+
+    let id = 0;
+
+    data.map((region) => {
+       let facePerson = {
+        leftCol: region.region_info.bounding_box.left_col * width,
+        topRow: region.region_info.bounding_box.top_row * height,
+        rightCol: width - (region.region_info.bounding_box.right_col * width),
+        bottomRow: height - (region.region_info.bounding_box.bottom_row * height),
+        id : id
+       };
+      peopleFace.push(facePerson);
+      id++;
+    })
+    return peopleFace;
   }
 
 
   displayFaceBox = (box) => {
-    console.log(box);
     this.setState({box: box});
   }
 
@@ -91,7 +97,7 @@ class App extends Component {
     const MODEL_ID = 'face-detection';
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", returnClarifaiJSONRequest(this.state.input))
          .then(response => response.json())
-         .then(result => {console.log(result); this.displayFaceBox(this.calculateFaceLocation(result))})
+         .then(result => {this.displayFaceBox(this.calculateFaceLocation(result.outputs[0].data.regions))})
          .catch(error => {console.log('error', error); alert("Error format is not correct or Download failed")});
 
 
