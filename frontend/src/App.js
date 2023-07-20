@@ -57,9 +57,7 @@ class App extends Component {
       imageUrl: "",
       box: [],
       route: 'signIn',
-
-
-
+      
     }
   }
 
@@ -82,6 +80,7 @@ class App extends Component {
        };
       peopleFace.push(facePerson);
       id++;
+      return 0;
     })
     return peopleFace;
   }
@@ -110,12 +109,11 @@ class App extends Component {
   render(){
     return (
       <div className="App">
-        
+        <Navigation onRouteChange={this.onRouteChange} isSignedIn={this.state.isSignedIn} route={this.state.route}/>
         <ParticlesBg type="fountain" bg={true} />
          {this.state.route === 'signIn' ? <SignIn onRouteChange={this.onRouteChange} /> : 
          (this.state.route === 'register' ? <Register onRouteChange={this.onRouteChange} /> : 
           <div>
-              <Navigation onRouteChange={this.onRouteChange} />
               <Logo />
               <Rank />
               <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
