@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
 const database = JSON.parse(fs.readFileSync('./database.json').toString());
@@ -21,10 +22,13 @@ async function saveDatabaseToJSONFile(n) {
 }
 
 function searchUserbyEmail(email, password) {
+    
     const user = database.users.find(user => {
-        if (user.email === email && user.password === password) {
-            return user;
+        if (user.email === email) {
+            if (bcrypt.compareSync(password, user.password)){
+                return user;
             }
+          }
         }
     );
     if (user === undefined) {
@@ -60,6 +64,7 @@ function searchUserbyId(id){
     return user;
     
 }
+
 // body parser middleware very important to parse the body of the request
 // you can't use req.body without this middleware because it will be undefined
 
@@ -89,20 +94,25 @@ app.post('/signin' , (req,res) => {
 
 app.post('/register', (req,res) =>{
     const {email, name, password} = req.body;
-    if (isUserNotExist(email)) {
-        database.users.push({
-            id: database.users.length + 1,
-            name: name,
-            email: email,
-            password: password,
-            entries: 0,
-            joined: new Date()
-        });
-        res.json(database.users[database.users.length - 1]);
-        saveDatabaseToJSONFile(0);}  
-    else {
-        res.json('user already exist');
-    }
+    bcrypt.hash(password, null, null, function(err, hash) {
+        // Store hash in your password DB.
+        if (isUserNotExist(email)) {
+            database.users.push({
+                id: database.users.length + 1,
+                name: name,
+                email: email,
+                password: hash,
+                entries: 0,
+                joined: new Date()
+            });
+            res.json(database.users[database.users.length - 1]);
+            saveDatabaseToJSONFile(0);}  
+        else {
+            res.json('user already exist');
+        }
+
+    });
+   
   }    
 )
 

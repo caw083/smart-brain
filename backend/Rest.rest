@@ -8,6 +8,16 @@ POST http://localhost:3000/signin
 content-type: application/json
 
 {
+    "email" : "elisa@gmail.com",
+    "password" : "cookies"
+}
+
+### Request 2b (POST) in signin
+
+POST http://localhost:3000/signin
+content-type: application/json
+
+{
     "email" : "sally@gmail.com",
     "password" : "bananas"
 }
@@ -18,9 +28,9 @@ POST http://localhost:3000/register  HTTP/1.1
 content-type: application/json
 
 {
-    "name" : "yaya",
-    "email" : "yaya@gmail.com",
-    "password" : "yaya123"
+    "name" : "elisa",
+    "email" : "elisa@gmail.com",
+    "password" : "cookies"
 
 }
 
