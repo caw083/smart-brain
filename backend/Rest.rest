@@ -1,0 +1,22 @@
+### Request 1  (GET) from browser
+
+GET http://localhost:3000/
+
+### Request 2 (POST) in signin
+
+POST http://localhost:3000/signin
+
+### Request 3 (POST) in register
+
+POST http://localhost:3000/register  HTTP/1.1
+content-type: application/json
+
+{
+    "name" : "Sally",
+    "email" : "sally@gmail.com",
+    "password" : "cookies"
+
+}
+
+### Request 4 (GET) in register
+GET http://localhost:3000/register
