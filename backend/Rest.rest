@@ -47,5 +47,5 @@ POST http://localhost:3000/image
 content-type: application/json
 
 {
-    "id" : "124"
+    "id" : "123"
 }

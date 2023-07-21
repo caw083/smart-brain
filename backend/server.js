@@ -46,7 +46,20 @@ function isUserNotExist(email) {
     return false;
 }
 
-
+function searchUserbyId(id){
+    let found = false;
+    const user = database.users.find(user => {
+        if (user.id === Number(id) || user.id === id) {
+            found = true;
+            return user;
+        }
+    });
+    if (!found) {
+        return 'no such user';
+    }
+    return user;
+    
+}
 // body parser middleware very important to parse the body of the request
 // you can't use req.body without this middleware because it will be undefined
 
@@ -95,32 +108,17 @@ app.post('/register', (req,res) =>{
 
 app.get('/profile/:id', (req,res) => {
     const {id} = req.params;
-    let found = false;
-    database.users.forEach(user => {
-        if (user.id === Number(id) || user.id === id) {
-            found = true;
-            return res.json(user);
-        }
-    });
-    if (!found) {
-        res.status(404).json('no such user');
-    }
-})
+    const user  = searchUserbyId(id);
+    user === 'no such user' ? res.status(404).json(user) : res.json(user); 
+  }
+)
 
 app.post('/image', (req,res) => {
     const {id} = req.body;
-    let found = false;
-    database.users.forEach(user => {
-        if (user.id === Number(id) || user.id === id) {
-            found = true;
-            user.entries++;
-            saveDatabaseToJSONFile(0);
-            return res.json(user);
-        }
-    });
-    if (!found) {
-        res.status(404).json('no such user');
-    }
+    const user  = searchUserbyId(id);
+    user.entries++;
+    saveDatabaseToJSONFile(0);
+    user === 'no such user' ? res.status(404).json(user) : res.json(user);
 
 })
 
