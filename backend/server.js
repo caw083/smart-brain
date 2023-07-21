@@ -53,14 +53,13 @@ function isUserNotExist(email) {
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-    console.log('Middleware 1');
     next();
 })
 
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.json(database.users);
 
 })
 
@@ -77,7 +76,6 @@ app.post('/signin' , (req,res) => {
 
 app.post('/register', (req,res) =>{
     const {email, name, password} = req.body;
-    console.log("isUser Exist:" + isUserNotExist(email));
     if (isUserNotExist(email)) {
         database.users.push({
             id: database.users.length + 1,
@@ -92,11 +90,39 @@ app.post('/register', (req,res) =>{
     else {
         res.json('user already exist');
     }
-
-  }
-    
+  }    
 )
 
+app.get('/profile/:id', (req,res) => {
+    const {id} = req.params;
+    let found = false;
+    database.users.forEach(user => {
+        if (user.id === Number(id) || user.id === id) {
+            found = true;
+            return res.json(user);
+        }
+    });
+    if (!found) {
+        res.status(404).json('no such user');
+    }
+})
+
+app.post('/image', (req,res) => {
+    const {id} = req.body;
+    let found = false;
+    database.users.forEach(user => {
+        if (user.id === Number(id) || user.id === id) {
+            found = true;
+            user.entries++;
+            saveDatabaseToJSONFile(0);
+            return res.json(user);
+        }
+    });
+    if (!found) {
+        res.status(404).json('no such user');
+    }
+
+})
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');

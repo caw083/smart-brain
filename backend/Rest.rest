@@ -35,3 +35,17 @@ content-type: application/json
     "password" : "bananas"
 }
 
+
+### Request 5 (GET) in profile
+
+GET http://localhost:3000/profile/124
+
+
+### Request 6 (PUT) in image
+
+POST http://localhost:3000/image
+content-type: application/json
+
+{
+    "id" : "124"
+}
