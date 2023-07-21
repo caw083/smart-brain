@@ -5,6 +5,12 @@ GET http://localhost:3000/
 ### Request 2 (POST) in signin
 
 POST http://localhost:3000/signin
+content-type: application/json
+
+{
+    "email" : "sally@gmail.com",
+    "password" : "bananas"
+}
 
 ### Request 3 (POST) in register
 
@@ -12,11 +18,20 @@ POST http://localhost:3000/register  HTTP/1.1
 content-type: application/json
 
 {
-    "name" : "Sally",
-    "email" : "sally@gmail.com",
-    "password" : "cookies"
+    "name" : "yaya",
+    "email" : "yaya@gmail.com",
+    "password" : "yaya123"
 
 }
 
-### Request 4 (GET) in register
-GET http://localhost:3000/register
+### Request 4 (POST) in register
+
+POST http://localhost:3000/register  HTTP/1.1
+content-type: application/json
+
+{
+    "name" : "yaya",
+    "email" : "sally@gmail.com",
+    "password" : "bananas"
+}
+
