@@ -3,28 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-
-const database = { 
-    users : [ 
-        {
-            id: '123',
-            name: 'John',
-            email: 'john@gmail.com',
-            password: 'cookies',
-            entries: 0,
-            joined: new Date()
-
-        },
-        {
-            id: '124',
-            name: 'Sally',
-            email: 'sally@gmail.com',
-            password: 'bananas',
-            entries: 0,
-            joined: new Date()
-        }
-    ]
-}
+const database = JSON.parse(fs.readFileSync('./database.json').toString());
 
 async function saveDatabaseToJSONFile(n) {
     fs.writeFile('./database.json', JSON.stringify(database), (err) => {    
