@@ -132,12 +132,13 @@ app.get('/profile/:id', (req,res) => {
   }
 )
 
-app.post('/image', (req,res) => {
+app.put('/image', (req,res) => {
     const {id} = req.body;
+    console.log("image");
     const user  = searchUserbyId(id);
     user.entries++;
     saveDatabaseToJSONFile(0);
-    user === 'no such user' ? res.status(404).json(user) : res.json(user);
+    user === 'no such user' ? res.status(404).json(user.entries) : res.json(user.entries);
 
 })
 

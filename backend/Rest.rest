@@ -53,9 +53,9 @@ GET http://localhost:3000/profile/124
 
 ### Request 6 (PUT) in image
 
-POST http://localhost:3000/image
+PUT http://localhost:3000/image
 content-type: application/json
 
 {
-    "id" : "123"
+    "id" : 1
 }
