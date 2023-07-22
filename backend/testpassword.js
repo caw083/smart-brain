@@ -10,3 +10,15 @@ bcrypt.compare("apples", "$2a$10$/Y0LHc2uMVvkRd.O8wAzSeSTt33EbQmc6UbXWyUApDKUV22
     // res == true
     console.log(res);
 })
+
+fetch('http://localhost:3000/signin', {
+            method: 'post',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({
+                email: 'sally@gmail.com',
+                password: 'bananas' 
+                })
+            }
+        ).then(response => response.json())
+        .then(user => console.log)
+        .catch(err => console.log(err))

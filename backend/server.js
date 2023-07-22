@@ -2,6 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
 const app = express();
 const database = JSON.parse(fs.readFileSync('./database.json').toString());
@@ -55,7 +56,7 @@ function searchUserbyId(id){
     const user = database.users.find(user => {
         if (user.id === Number(id) || user.id === id) {
             found = true;
-            return user;
+            return user.id;
         }
     });
     if (!found) {
@@ -69,6 +70,13 @@ function searchUserbyId(id){
 // you can't use req.body without this middleware because it will be undefined
 
 app.use(bodyParser.json());
+
+// cors middleware
+// cors is a package that allows you to make request from one domain to another
+// for example if you have a react app running on localhost:3000 and you want to make a request to your server running on localhost:3001
+// you need to use cors to allow this request to happen
+
+app.use(cors());
 
 app.use((req, res, next) => {
     next();
@@ -93,6 +101,7 @@ app.post('/signin' , (req,res) => {
 )
 
 app.post('/register', (req,res) =>{
+    console.log("hello")
     const {email, name, password} = req.body;
     bcrypt.hash(password, null, null, function(err, hash) {
         // Store hash in your password DB.
