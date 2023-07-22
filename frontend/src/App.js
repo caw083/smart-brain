@@ -57,8 +57,26 @@ class App extends Component {
       imageUrl: "",
       box: [],
       route: 'signIn',
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
       
     }
+  }
+
+
+  loadUser = (data) => {
+    this.setState({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+    }})
   }
 
   calculateFaceLocation = (data) => {
@@ -94,11 +112,33 @@ class App extends Component {
     this.setState({input: event.target.value});
   }
 
+  updateProfileCount = () => {
+    fetch('http://localhost:3000/image', {
+      method: 'put',
+      headers: {'Content-type': 'application/json'},
+      body: JSON.stringify({
+          id: this.state.user.id})
+    })
+    .then(response => response.json())
+    .then(count => { 
+      this.setState(Object.assign(this.state.user, { entries: count})
+      )
+    }); 
+
+  }
+
+
+
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
     const MODEL_ID = 'face-detection';
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", returnClarifaiJSONRequest(this.state.input))
-         .then(response => response.json())
+         .then(response =>{ 
+          if (response) {
+            this.updateProfileCount();
+            return response.json();
+          }
+        })
          .then(result => {this.displayFaceBox(this.calculateFaceLocation(result.outputs[0].data.regions))})
          .catch(error => {console.log('error', error); alert("Error format is not correct or Download failed")});
   }
@@ -109,14 +149,14 @@ class App extends Component {
   render(){
     return (
       <div className="App">
-        <Navigation onRouteChange={this.onRouteChange} isSignedIn={this.state.isSignedIn} route={this.state.route}/>
+        <Navigation onRouteChange={this.onRouteChange} route={this.state.route}/>
         <ParticlesBg type="fountain" bg={true} />
-         {this.state.route === 'signIn' ? <SignIn onRouteChange={this.onRouteChange} /> : 
+         {this.state.route === 'signIn' ? <SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser} /> : 
          (this.state.route === 'register' ? <Register onRouteChange={this.onRouteChange} /> : 
           <div>
               <Logo />
-              <Rank />
-              <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
+              <Rank name={this.state.user.name} entries={this.state.user.entries} />
+              <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}  />
               <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl} />
             </div>)
           }
