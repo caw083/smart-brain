@@ -20,7 +20,6 @@ const postgres = knex({
 
 async function passwordHashing(email, password){
     const hash = bcrypt.hashSync(password);
-    console.log(hash);
     postgres('login').insert({
         email : email,
         hash : hash
@@ -44,7 +43,7 @@ async function Register(name,email, password){
 async function updateUserEntries(id){
     postgres('users').where('id', '=', id).first()
     .increment('entries', 1).returning('entries')
-    .then(entries => console.log(entries)).catch(err => console.log(err));
+    .then(entries => entries.json()).catch(err => console.log(err));
 }
 
 //updateUserEntries(2);
@@ -97,7 +96,6 @@ app.use((req, res, next) => {
 app.get('/', async (req, res) => {
     try{
         const data = await getUsersFromDatabase();
-        console.log(data);
         res.json(data);
     }
     catch(err){
@@ -114,10 +112,9 @@ app.get('/profile/:id', async (req,res) => {
 
 app.put('/image', async (req,res) => {
     const {id} = req.body;
-    console.log("image");
     await updateUserEntries(Number(id));
     const user  = await searchUserById(Number(id));
-    user === 'no such user' ? res.status(404).json(user) : res.json(user);
+    user === 'no such user' ? res.status(404).json(user) : res.json(Number(user.entries));
 
 })
 app.post('/signin' , async (req,res) => {
@@ -127,6 +124,8 @@ app.post('/signin' , async (req,res) => {
         if (user === {} || !bcrypt.compareSync(password, user.hash)){
             res.json('password or email is incorrect')
         } else {
+            // delete user.hash;
+            delete user.hash;
             res.json(user);
         }
     }
