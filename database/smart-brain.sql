@@ -35,7 +35,7 @@ UPDATE users
 SET entries = entries +  1
 WHERE id=1;  
 
-SELECT users.id, login.email, hash, entries from login
+SELECT users.id, login.email, hash, entries, joined from login
 RIGHT JOIN users ON login.email = users.email
 WHERE login.email = 'sally@gmail.com';
 

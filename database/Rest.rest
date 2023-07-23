@@ -1,0 +1,61 @@
+### Request 1  (GET) from browser
+
+GET http://localhost:3000/
+
+### Request 2 (POST) in signin
+
+POST http://localhost:3000/signin
+content-type: application/json
+
+{
+    "email" : "elisa@gmail.com",
+    "password" : "cookies"
+}
+
+### Request 2b (POST) in signin
+
+POST http://localhost:3000/signin
+content-type: application/json
+
+{
+    "email" : "sally@gmail.com",
+    "password" : "bananas"
+}
+
+### Request 3 (POST) in register
+
+POST http://localhost:3000/register  HTTP/1.1
+content-type: application/json
+
+{
+    "name" : "elisa",
+    "email" : "elisa@gmail.com",
+    "password" : "cookies"
+
+}
+
+### Request 4 (POST) in register
+
+POST http://localhost:3000/register  HTTP/1.1
+content-type: application/json
+
+{
+    "name" : "sally",
+    "email" : "sally@gmail.com",
+    "password" : "bananas"
+}
+
+
+### Request 5 (GET) in profile
+
+GET http://localhost:3000/profile/2
+
+
+### Request 6 (PUT) in image
+
+PUT http://localhost:3000/image
+content-type: application/json
+
+{
+    "id" : 1
+}
